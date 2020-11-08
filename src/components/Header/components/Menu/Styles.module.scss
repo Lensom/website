@@ -1,0 +1,37 @@
+.menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu__item {
+  margin: 0 1em;
+}
+
+.menu__link {
+  color: #fff;
+  font-size: 1.2em;
+  position: relative;
+  &:after {
+    position: absolute;
+    content: '';
+    bottom: -0.125em;
+    left: 0;
+    width: 0.65em;
+    height: .125em;
+    background-color: transparent;
+    transition: all .3s ease;
+  }
+  &:hover {
+    &:after {
+      background-color: #fff;
+      width: 100%;
+    }
+  }
+}
+
+.menu__active {
+  &:after {
+    background-color: #fff;
+  }
+}

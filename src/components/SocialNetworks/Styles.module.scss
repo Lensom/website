@@ -1,0 +1,31 @@
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item {
+  margin: 0 1em;
+}
+
+.link {
+  color: #fff;
+  font-size: .85em;
+  position: relative;
+  &:after {
+    position: absolute;
+    content: '';
+    bottom: -0.125em;
+    left: 0;
+    width: 0.65em;
+    height: .125em;
+    background-color: transparent;
+    transition: all .3s ease;
+  }
+  &:hover {
+    &:after {
+      background-color: #fff;
+      width: 100%;
+    }
+  }
+}
