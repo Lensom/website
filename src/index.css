@@ -69,7 +69,6 @@ a {
 body {
   margin: 0;
   height: 100vh;
-  position: relative;
   font-family: 'NeueHaasDisplay', sans-serif;
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
@@ -82,7 +81,9 @@ body {
   margin: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
