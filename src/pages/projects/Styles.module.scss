@@ -12,8 +12,8 @@ body {
   overflow: hidden;
 }
 
-canvas {
-  position: absolute;
+.canvas > div {
+  z-index: 1;
 }
 
 .loading {
