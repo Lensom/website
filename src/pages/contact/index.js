@@ -1,8 +1,9 @@
 import React from 'react';
+import classes from './Styles.module.scss';
 
 const Contact = () => {
   return (
-    'Contact'
+    <h1 className={classes.title}>Contact</h1>
   )
 }
 

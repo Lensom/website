@@ -23,8 +23,9 @@
     transition: all .3s ease;
   }
   &:hover {
+    color: rgb(0, 229, 255);
     &:after {
-      background-color: #fff;
+      background-color: rgb(0, 229, 255);
       width: 100%;
     }
   }
