@@ -1,8 +1,5 @@
 .footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 1;
   &__wrapper {
     display: flex;
@@ -15,4 +12,15 @@
 .game {
   color: #000;
   cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .footer {
+    position: fixed;
+    bottom: .33em;
+    width: 100%;
+    &__wrapper {
+      padding: 1em;
+    }
+  }
 }

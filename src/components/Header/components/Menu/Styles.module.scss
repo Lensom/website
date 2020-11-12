@@ -36,3 +36,18 @@
     background-color: #fff;
   }
 }
+
+
+@media screen and (max-width: 768px) {
+  .menu__link {
+    font-size: 1em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .menu {
+    width: 100%;
+    justify-content: space-around;
+    padding: 1em 0 0;
+  }
+}

@@ -9,16 +9,16 @@ function AnimatedCursor({
   outerScale = 5,
   innerScale = 0.7
 }) {
-  const cursorOuterRef = useRef()
-  const cursorInnerRef = useRef()
-  const requestRef = useRef()
-  const previousTimeRef = useRef()
-  const [coords, setCoords] = useState({ x: 0, y: 0 })
-  const [isVisible, setIsVisible] = useState(true)
-  const [isActive, setIsActive] = useState(false)
-  const [isActiveClickable, setIsActiveClickable] = useState(false)
-  let endX = useRef(0)
-  let endY = useRef(0)
+  const cursorOuterRef = useRef();
+  const cursorInnerRef = useRef();
+  const requestRef = useRef();
+  const previousTimeRef = useRef();
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState(true);
+  const [isActive, setIsActive] = useState(false);
+  const [isActiveClickable, setIsActiveClickable] = useState(false);
+  let endX = useRef(0);
+  let endY = useRef(0);
 
   const onMouseMove = useCallback(({ clientX, clientY }) => {
     setCoords({ x: clientX, y: clientY })

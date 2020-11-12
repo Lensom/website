@@ -1,11 +1,6 @@
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
   z-index: 1;
-  height: 0;
   &__wrapper {
     display: flex;
     justify-content: space-between;
@@ -14,3 +9,17 @@
   }
 }
 
+@media screen and (max-width: 768px) {
+  .header__wrapper {
+    padding: 1em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header__wrapper {
+    flex-direction: column;
+    a {
+      display: flex;
+    }
+  }
+}

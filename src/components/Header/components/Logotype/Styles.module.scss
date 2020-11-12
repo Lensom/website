@@ -9,3 +9,14 @@
 .name {
   letter-spacing: 0.125em;
 }
+
+@media screen and (max-width: 480px) {
+  .name {
+    letter-spacing: 0em;
+    position: relative;
+    right: 5px;
+  }
+  .logotype {
+    font-size: 1.4em;
+  }
+}
