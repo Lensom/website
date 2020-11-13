@@ -10,7 +10,7 @@ const SocialNetworks = () => (
       <a href="https://www.instagram.com/magurawork/" target="_blank" rel="noreferrer" className={classes.link}>Instagram</a>
     </li>
     <li className={classes.item}>
-    <a href="https://github.com/" target="_blank" rel="noreferrer" className={classes.link}>Github</a>
+      <a href="https://github.com/Lensom" target="_blank" rel="noreferrer" className={classes.link}>Github</a>
     </li>
   </ul>
 )

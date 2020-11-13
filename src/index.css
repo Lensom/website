@@ -113,3 +113,10 @@ body {
 .slide-exit-active {
   transform: translateY(-100%);
 }
+
+::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'NeueHaasDisplay', sans-serif;
+  font-weight: 500;
+  font-size: 1.4em;
+}
