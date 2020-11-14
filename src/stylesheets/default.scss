@@ -64,6 +64,7 @@ body {
   line-height: 1.65;
   margin: 0;
   cursor: none;
+  overflow: hidden;
 }
 
 #root {
@@ -106,4 +107,10 @@ body {
 input,
 textarea {
   cursor: none;
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    overflow: auto;
+  }
 }
