@@ -1,0 +1,109 @@
+@import './variables';
+@import './fonts.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  transition: 0.2s color ease-in;
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: $default-font;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: $black;
+  font-size: 16px;
+  min-width: 320px;
+  position: relative;
+  line-height: 1.65;
+  margin: 0;
+  cursor: none;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+.slide-enter,
+.slide-exit {
+  transition: transform 1000ms ease-out;
+}
+
+.slide-enter {
+  transform: translateY(100%);
+}
+
+.slide-enter.slide-enter-active {
+  transform: translateY(0%);
+}
+
+.slide-exit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: translateY(0%);
+}
+
+.slide-exit-active {
+  transform: translateY(-100%);
+}
+
+::placeholder {
+  color: $gray;
+  font-family: $default-font;
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+input,
+textarea {
+  cursor: none;
+}

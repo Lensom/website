@@ -1,0 +1,26 @@
+@font-face {
+  font-family: 'NeueHaasDisplay';
+  font-weight: 700;
+  src: 
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayBold/NeueHaasDisplayBold.woff) format('woff'),
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayBold/NeueHaasDisplayBold.ttf) format('ttf'),
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayBold/NeueHaasDisplayBold.eot) format('eot');
+}
+
+@font-face {
+  font-family: 'NeueHaasDisplay';
+  font-weight: 500;
+  src: 
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayMedium/NeueHaasDisplayMedium.woff) format('woff'),
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayMedium/NeueHaasDisplayMedium.ttf) format('ttf'),
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayMedium/NeueHaasDisplayMedium.eot) format('eot');
+}
+
+@font-face {
+  font-family: 'NeueHaasDisplay';
+  font-weight: 300;
+  src: 
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayLight/NeueHaasDisplayLight.woff) format('woff'),
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayLight/NeueHaasDisplayLight.ttf) format('ttf'),
+    local('NeueHaasDisplay'), url(../fonts/NeueHaasDisplayLight/NeueHaasDisplayLight.eot) format('eot');
+}
