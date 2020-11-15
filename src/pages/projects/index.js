@@ -1,7 +1,9 @@
-import React from "react"
+import React, { useRef } from "react"
 import './style.css';
 import classes from './Styles.module.scss';
-import { TweenMax } from "gsap/TweenMax";
+import { TweenMax, Power3, Power4, Elastic } from "gsap";
+import charming from 'charming';
+// import imagesLoaded from 'imagesLoaded';
 
 import img1 from './images/1.jpg';
 import img2 from './images/2.jpg';
@@ -12,81 +14,88 @@ import img6 from './images/6.jpg';
 
 const Projects = () => {
 
+  const slideshowItem = useRef(null);
 
   const getMousePos = (e) => {
     let posx = 0;
     let posy = 0;
-if (!e) e = window.event;
-if (e.pageX || e.pageY) 	{
-  posx = e.pageX;
-  posy = e.pageY;
-}
-else if (e.clientX || e.clientY) 	{
-  posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-  posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-}
-return { x : posx, y : posy }
-};
-// Gets a random integer.
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-// Equation of a line (y = mx + b ).
-const lineEq = (y2, y1, x2, x1, currentVal) => {
+
+    if (!e) e = window.event;
+
+    if (e.pageX || e.pageY) 	{
+      posx = e.pageX;
+      posy = e.pageY;
+    }
+
+    else if (e.clientX || e.clientY) 	{
+      posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+      posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+    }
+
+    return { x : posx, y : posy }
+  };
+
+  // Gets a random integer.
+  const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+  // Equation of a line (y = mx + b ).
+  const lineEq = (y2, y1, x2, x1, currentVal) => {
     const m = (y2 - y1) / (x2 - x1);
     const b = y1 - m * x1;
     return m * currentVal + b;
-};
+  };
 
-// Some random chars.
-const chars = ['$','%','#','&','=','*','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','.',':',',','^'];
-const charsTotal = chars.length;
+  // Some random chars.
+  const chars = ['$','%','#','&','=','*','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','.',':',',','^'];
+  const charsTotal = chars.length;
 
-// Randomize letters function. Used when navigating the slideshow to switch the curretn slide´s texts.
-const randomizeLetters = (letters) => {
+  // Randomize letters function. Used when navigating the slideshow to switch the curretn slide´s texts.
+  const randomizeLetters = (letters) => {
     return new Promise((resolve, reject) => {
-        const lettersTotal = letters.length;
-        let cnt = 0;
+      const lettersTotal = letters.length;
+      let cnt = 0;
 
-        letters.forEach((letter, pos) => { 
-            let loopTimeout;
-            const loop = () => {
-                letter.innerHTML = chars[getRandomInt(0,charsTotal-1)];
-                loopTimeout = setTimeout(loop, getRandomInt(50,500));
-            };
-            loop();
+      letters.forEach((letter, pos) => { 
+        let loopTimeout;
+        const loop = () => {
+          letter.innerHTML = chars[getRandomInt(0,charsTotal-1)];
+          loopTimeout = setTimeout(loop, getRandomInt(50,500));
+        };
+        loop();
 
-            const timeout = setTimeout(() => {
-                clearTimeout(loopTimeout);
-                letter.style.opacity = 1;
-                letter.innerHTML = letter.dataset.initial;
-                ++cnt;
-                if ( cnt === lettersTotal ) {
-                    resolve();
-                }
-            }, pos*lineEq(40,0,8,200,lettersTotal));
-        });
+        const timeout = setTimeout(() => {
+          clearTimeout(loopTimeout);
+          letter.style.opacity = 1;
+          letter.innerHTML = letter.dataset.initial;
+          ++cnt;
+          if ( cnt === lettersTotal ) {
+              resolve();
+          }
+        }, pos*lineEq(40,0,8,200,lettersTotal));
+      });
     });
-};
+  };
 
-// Hide each of the letters with random delays. Used when showing the current slide´s content.
-const disassembleLetters = (letters) => {
+  // Hide each of the letters with random delays. Used when showing the current slide´s content.
+  const disassembleLetters = (letters) => {
     return new Promise((resolve, reject) => {
-        const lettersTotal = letters.length;
-        let cnt = 0;
-        
-        letters.forEach((letter, pos) => {
-            setTimeout(() => {
-                letter.style.opacity = 0;
-                ++cnt;
-                if ( cnt === lettersTotal ) {
-                    resolve();
-                }
-            }, pos*30);
-        });
+      const lettersTotal = letters.length;
+      let cnt = 0;
+      
+      letters.forEach((letter, pos) => {
+        setTimeout(() => {
+          letter.style.opacity = 0;
+          ++cnt;
+          if ( cnt === lettersTotal ) {
+            resolve();
+          }
+        }, pos * 30);
+      });
     });
-}
+  }
 
-// The Slide class.
-class Slide {
+  // The Slide class.
+  class Slide {
     constructor(el) {
         this.DOM = {el: el};
         // The image wrap element.
@@ -393,30 +402,43 @@ class Content {
 
 // The Slideshow class.
 class Slideshow {
-    constructor(el) {
-        this.DOM = {el: el};
-        // The slides.
-        this.slides = [];
-        Array.from(this.DOM.el.querySelectorAll('.slide')).forEach(slideEl => this.slides.push(new Slide(slideEl)));
-        // The total number of slides.
-        this.slidesTotal = this.slides.length;
-        // At least 4 slides to continue...
-        if ( this.slidesTotal < 4 ) {
-            return false;
-        }
-        // Current slide position.
-        this.current = 0;
-        this.DOM.deco = this.DOM.el.querySelector('.slideshow__deco');
-
-        this.contents = [];
-        Array.from(document.querySelectorAll('.content > .content__item')).forEach(contentEl => this.contents.push(new Content(contentEl)));
-
-        // Set the current/next/previous slides. 
-        this.render();
-        this.currentSlide.showTexts(false);
-        // Init/Bind events.
-        this.initEvents();
+  constructor(el) {
+    let DOM = { el }
+  
+    // The slides.
+    let slides = [];
+    let { currentItem } = DOM.el;
+  
+    if (currentItem != null) {
+      Array.from(currentItem.querySelectorAll('.slide')).forEach(slideEl => slides.push(new Slide(slideEl))); 
     }
+    if (currentItem) {
+      Array.from(currentItem.querySelectorAll('.slide')).forEach(slideEl => slides.push(new Slide(slideEl))); 
+    }
+
+    console.log(slides.length)
+    // The total number of slides.
+    let slidesTotal = slides.length;
+    // At least 4 slides to continue...
+    // if ( slidesTotal < 4 ) return false;
+
+    // Current slide position.
+    let current = 0;
+    // STOP
+    console.log(currentItem.querySelector('.slideshow__deco'))
+    DOM.deco = currentItem.querySelector('.slideshow__deco');
+    console.log(DOM.deco)
+
+    this.contents = [];
+    Array.from(document.querySelectorAll('.content > .content__item')).forEach(contentEl => this.contents.push(new Content(contentEl)));
+
+    // Set the current/next/previous slides. 
+    this.render();
+    this.currentSlide.showTexts(false);
+    // Init/Bind events.
+    this.initEvents();
+    }
+
     render() {
         // The current, next, and previous slides.
         this.currentSlide = this.slides[this.current];
@@ -578,39 +600,23 @@ class Slideshow {
     }
 }
 
-// Window sizes.
-let winsize;
-const calcWinsize = () => winsize = {width: window.innerWidth, height: window.innerHeight};
-calcWinsize();
-window.addEventListener('resize', calcWinsize);
+  // Window sizes.
+  let winsize;
+  const calcWinsize = () => winsize = {width: window.innerWidth, height: window.innerHeight};
+  calcWinsize();
+  window.addEventListener('resize', calcWinsize);
 
-let allowTilt = true;
+  let allowTilt = true;
 
-// Init slideshow.
-const slideshow = new Slideshow(document.querySelector('.slideshow'));
+  // Init slideshow.
+  const slideshow = new Slideshow(slideshowItem);
 
-// Preload all the images in the page..
-const loader = document.querySelector('.loader');
-imagesLoaded(document.querySelectorAll('.slide__img'), {background: true}, () => document.body.classList.remove('loading'));
+  // Preload all the images in the page..
+  const loader = document.querySelector('.loader');
+  // imagesLoaded(document.querySelectorAll('.slide__img'), {background: true}, () => document.body.classList.remove('loading'));
   return (
     <main>
-			<div className="frame">
-				<header className="codrops-header">
-					<h1 className="codrops-header__title">Diagonal Slideshow</h1>
-					<div className="codrops-links">
-						<a className="github" href="https://github.com/codrops/DiagonalSlideshow/">GitHub</a>
-						<a className="codrops-icon codrops-icon--prev" href="https://tympanus.net/Development/SlideOutBoxMenu/" title="Previous Demo">
-							<svg className="icon icon--arrow">
-							</svg>
-						</a>
-						<a className="codrops-icon codrops-icon--drop" href="https://tympanus.net/codrops/?p=35765" title="Back to the article">
-							<svg className="icon icon--drop">
-							</svg>
-						</a>
-					</div>
-				</header>
-			</div>
-			<div className="slideshow">
+			<div className="slideshow" ref={slideshowItem}>
 				<div className="slideshow__deco"></div>
 				<div className="slide">
 					<div className="slide__img-wrap">
