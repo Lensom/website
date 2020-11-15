@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import './style.css';
 import classes from './Styles.module.scss';
 import { TweenMax, Power3, Power4, Elastic } from "gsap";
@@ -97,6 +97,7 @@ const Projects = () => {
   // The Slide class.
   class Slide {
     constructor(el) {
+      console.log(el)
         this.DOM = {el: el};
         // The image wrap element.
         this.DOM.imgWrap = this.DOM.el.querySelector('.slide__img-wrap');
@@ -404,106 +405,107 @@ class Content {
 class Slideshow {
   constructor(el) {
     let DOM = { el }
-  
+
     // The slides.
-    let slides = [];
-    let { currentItem } = DOM.el;
-  
-    if (currentItem != null) {
-      Array.from(currentItem.querySelectorAll('.slide')).forEach(slideEl => slides.push(new Slide(slideEl))); 
-    }
-    if (currentItem) {
-      Array.from(currentItem.querySelectorAll('.slide')).forEach(slideEl => slides.push(new Slide(slideEl))); 
+    this.slides = [];
+    let { current } = DOM.el;
+    
+    if (current != null) {
+      Array.from(current.querySelectorAll('.slide')).forEach(slideEl => this.slides.push(new Slide(slideEl))); 
     }
 
-    console.log(slides.length)
     // The total number of slides.
-    let slidesTotal = slides.length;
+    this.slidesTotal = this.slides.length;
+
     // At least 4 slides to continue...
-    // if ( slidesTotal < 4 ) return false;
+    if ( this.slidesTotal < 4 ) return false;
 
     // Current slide position.
-    let current = 0;
-    // STOP
-    console.log(currentItem.querySelector('.slideshow__deco'))
-    DOM.deco = currentItem.querySelector('.slideshow__deco');
-    console.log(DOM.deco)
+    this.currentStep = 0;
+    DOM.deco = current.querySelector('.slideshow__deco');
 
-    this.contents = [];
-    Array.from(document.querySelectorAll('.content > .content__item')).forEach(contentEl => this.contents.push(new Content(contentEl)));
+    let contents = [];
+    Array.from(document.querySelectorAll('.content > .content__item')).forEach(contentEl => contents.push(new Content(contentEl)));
 
     // Set the current/next/previous slides. 
     this.render();
     this.currentSlide.showTexts(false);
+
     // Init/Bind events.
     this.initEvents();
+  }
+
+  render() {
+    // The current, next, and previous slides.
+    this.currentSlide = this.slides[this.currentStep];
+
+    this.nextSlide = this.slides[this.currentStep+1 <= this.slidesTotal-1 ? this.currentStep+1 : 0];
+    this.prevSlide = this.slides[this.currentStep-1 >= 0 ? this.currentStep-1 : this.slidesTotal-1];
+
+    this.currentSlide.setCurrent();
+    this.nextSlide.setRight();
+
+    this.prevSlide.setLeft();
+  }
+
+
+  initEvents() {
+    // Clicking the next and previous slide starts the navigation / clicking the current shows its content..
+    this.clickFn = (slide) => {
+      if ( slide.isPositionedRight() ) {
+        this.navigate('next');
+      }
+      else if ( slide.isPositionedLeft() ) {
+        this.navigate('prev');
+      }
+      else {
+        this.showContent();
+      }
+    };
+    for (let slide of this.slides) {
+      slide.DOM.imgWrap.addEventListener('click', () => this.clickFn(slide));
     }
 
-    render() {
-        // The current, next, and previous slides.
-        this.currentSlide = this.slides[this.current];
-        this.nextSlide = this.slides[this.current+1 <= this.slidesTotal-1 ? this.current+1 : 0];
-        this.prevSlide = this.slides[this.current-1 >= 0 ? this.current-1 : this.slidesTotal-1];
-        this.currentSlide.setCurrent();
-        this.nextSlide.setRight();
-        this.prevSlide.setLeft();
-    }
-    initEvents() {
-        // Clicking the next and previous slide starts the navigation / clicking the current shows its content..
-        this.clickFn = (slide) => {
-            if ( slide.isPositionedRight() ) {
-                this.navigate('next');
-            }
-            else if ( slide.isPositionedLeft() ) {
-                this.navigate('prev');
-            }
-            else {
-                this.showContent();
-            }
-        };
-        for (let slide of this.slides) {
-            slide.DOM.imgWrap.addEventListener('click', () => this.clickFn(slide));
-        }
+    this.resizeFn = () => {
+      // Reposition the slides.
+      this.nextSlide.setRight(this.isContentOpen);
+      this.prevSlide.setLeft(this.isContentOpen);
+      this.currentSlide.setCurrent(this.isContentOpen);
 
-        this.resizeFn = () => {
-            // Reposition the slides.
-            this.nextSlide.setRight(this.isContentOpen);
-            this.prevSlide.setLeft(this.isContentOpen);
-            this.currentSlide.setCurrent(this.isContentOpen);
+      if ( this.isContentOpen ) {
+          TweenMax.set(this.DOM.deco, {
+              scaleX: winsize.width/this.DOM.deco.offsetWidth,
+              scaleY: winsize.height/this.DOM.deco.offsetHeight,
+              x: -20,
+              y: 20
+          });
+      }
+    };
+    window.addEventListener('resize', this.resizeFn);
+  }
 
-            if ( this.isContentOpen ) {
-                TweenMax.set(this.DOM.deco, {
-                    scaleX: winsize.width/this.DOM.deco.offsetWidth,
-                    scaleY: winsize.height/this.DOM.deco.offsetHeight,
-                    x: -20,
-                    y: 20
-                });
-            }
-        };
-        window.addEventListener('resize', this.resizeFn);
-    }
-    showContent() {
-        if ( this.isContentOpen || this.isAnimating ) return;
-        allowTilt = false;
-        this.isContentOpen = true;
-        this.DOM.el.classList.add('slideshow--previewopen');
-        TweenMax.to(this.DOM.deco, .8, {
-            ease: Power4.easeInOut,
-            scaleX: winsize.width/this.DOM.deco.offsetWidth,
-            scaleY: winsize.height/this.DOM.deco.offsetHeight,
-            x: -20,
-            y: 20
-        });
-        // Move away right/left slides.
-        this.prevSlide.moveToPosition({position: -2});
-        this.nextSlide.moveToPosition({position: 2});
-        // Position the current slide and reset its image scale value.
-        this.currentSlide.moveToPosition({position: 3, resetImageScale: true});
-        // Show content and back arrow (to close the content).
-        this.contents[this.current].show();
-        // Hide texts.
-        this.currentSlide.hideTexts(true);
-    }
+  showContent() {
+    if ( this.isContentOpen || this.isAnimating ) return;
+    allowTilt = false;
+    this.isContentOpen = true;
+    this.DOM.el.classList.add('slideshow--previewopen');
+    TweenMax.to(this.DOM.deco, .8, {
+        ease: Power4.easeInOut,
+        scaleX: winsize.width/this.DOM.deco.offsetWidth,
+        scaleY: winsize.height/this.DOM.deco.offsetHeight,
+        x: -20,
+        y: 20
+    });
+    // Move away right/left slides.
+    this.prevSlide.moveToPosition({position: -2});
+    this.nextSlide.moveToPosition({position: 2});
+    // Position the current slide and reset its image scale value.
+    this.currentSlide.moveToPosition({position: 3, resetImageScale: true});
+    // Show content and back arrow (to close the content).
+    this.contents[this.current].show();
+    // Hide texts.
+    this.currentSlide.hideTexts(true);
+  }
     hideContent() {
         if ( !this.isContentOpen || this.isAnimating ) return;
 
@@ -620,7 +622,7 @@ class Slideshow {
 				<div className="slideshow__deco"></div>
 				<div className="slide">
 					<div className="slide__img-wrap">
-						<div className="slide__img" style={{backgroundImage: img1}}></div>
+						<div className="slide__img img1" style={{backgroundImage: img1}}></div>
 					</div>
 					<div className="slide__side">Memories &amp; Thoughts</div>
 					<div className="slide__title-wrap">
@@ -631,7 +633,7 @@ class Slideshow {
 				</div>
 				<div className="slide">
 					<div className="slide__img-wrap">
-						<div className="slide__img" style={{backgroundImage: img2}}></div>
+						<div className="slide__img img2" style={{backgroundImage: img2}}></div>
 					</div>
 					<div className="slide__side">Random Roam</div>
 					<div className="slide__title-wrap">
@@ -642,7 +644,7 @@ class Slideshow {
 				</div>
 				<div className="slide">
 					<div className="slide__img-wrap">
-						<div className="slide__img" style={{backgroundImage: img3}}></div>
+						<div className="slide__img img3" style={{backgroundImage: img3}}></div>
 					</div>
 					<div className="slide__side">Arbitrary Words</div>
 					<div className="slide__title-wrap">
@@ -653,7 +655,7 @@ class Slideshow {
 				</div>
 				<div className="slide">
 					<div className="slide__img-wrap">
-						<div className="slide__img" style={{backgroundImage: img4}}></div>
+						<div className="slide__img img4" style={{backgroundImage: img4}}></div>
 					</div>
 					<div className="slide__side">Haunted Drift</div>
 					<div className="slide__title-wrap">
@@ -664,7 +666,7 @@ class Slideshow {
 				</div>
 				<div className="slide">
 					<div className="slide__img-wrap">
-						<div className="slide__img" style={{backgroundImage: img5}}></div>
+						<div className="slide__img img5" style={{backgroundImage: img5}}></div>
 					</div>
 					<div className="slide__side">Fun Diverge</div>
 					<div className="slide__title-wrap">
@@ -675,7 +677,7 @@ class Slideshow {
 				</div>
 				<div className="slide">
 					<div className="slide__img-wrap">
-						<div className="slide__img" style={{backgroundImage: img6}}></div>
+						<div className="slide__img img6" style={{backgroundImage: img6}}></div>
 					</div>
 					<div className="slide__side">Hopes &amp; Dreams</div>
 					<div className="slide__title-wrap">
