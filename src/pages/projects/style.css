@@ -9,7 +9,6 @@ body {
 	color: var(--color-text);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	padding-top: 10rem;
 }
 
 .hidden {
@@ -303,18 +302,6 @@ body {
 }
 
 @media screen and (min-width: 53em) {
-	body {
-		padding: 0;
-	}
-	.frame {
-		top: 0;
-		display: grid;
-		align-items: start;
-		justify-items: end;
-		grid-template-columns: 50% 50%;
-		grid-template-rows: 100%;
-		grid-template-areas: '... header';
-	}
 	.codrops-header {
 		grid-area: header;
 		padding: 1rem 0.5rem;

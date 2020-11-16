@@ -41,7 +41,7 @@ const Projects = () => {
       this.calcSizes();
       
       this.calcTransforms();
-      
+
       this.initEvents();
     }
     // Gets the size of the image wrap.
@@ -427,99 +427,97 @@ const Projects = () => {
       this.currentSlide.hideTexts(true);
 
     }
-      hideContent() {
-          if ( !this.isContentOpen || this.isAnimating ) return;
+    hideContent() {
+      if ( !this.isContentOpen || this.isAnimating ) return;
+      this.DOM.el.current.classList.remove('slideshow--previewopen');
 
-          this.DOM.el.classList.remove('slideshow--previewopen');
+      this.contents[this.currentStep].hide();
 
-          // Hide content.
-          this.contents[this.currentStep].hide();
-
-          TweenMax.to(this.DOM.deco, .8, {
-              ease: Power4.easeInOut,
-              scaleX: 1,
-              scaleY: 1,
-              x: 0,
-              y: 0
-          });
-          // Move in right/left slides.
-          this.prevSlide.moveToPosition({position: -1});
-          this.nextSlide.moveToPosition({position: 1});
-          // Position the current slide.
-          this.currentSlide.moveToPosition({position: 0}).then(() => {
-              allowTilt = true;
-              this.isContentOpen = false;
-          });
-          // Show texts.
-          this.currentSlide.showTexts();
-      }
+      TweenMax.to(this.DOM.deco, .8, {
+        ease: Power4.easeInOut,
+        scaleX: 1,
+        scaleY: 1,
+        x: 0,
+        y: 0
+      });
+      
+      this.prevSlide.moveToPosition({position: -1});
+      this.nextSlide.moveToPosition({position: 1});
+      
+      this.currentSlide.moveToPosition({position: 0}).then(() => {
+        allowTilt = true;
+        this.isContentOpen = false;
+      });
+      
+      this.currentSlide.showTexts();
+    }
       // Animates the element behind the current slide.
-      bounceDeco(direction, delay) {
-          TweenMax.to(this.DOM.deco, .4, {
-              ease: 'Power2.easeIn',
-              delay: delay+delay*0.2,
-              x: direction === 'next' ? -40 : 40,
-              y: direction === 'next' ? -40 : 40,
-              onComplete: () => {
-                  TweenMax.to(this.DOM.deco, 0.6, {
-                      //ease: Elastic.easeOut.config(1, 0.65),
-                      ease: 'Power2.easeOut',
-                      x: 0,
-                      y: 0
-                  });
-              }
+    bounceDeco(direction, delay) {
+      TweenMax.to(this.DOM.deco, .4, {
+        ease: 'Power2.easeIn',
+        delay: delay + delay * .2,
+        x: direction === 'next' ? -40 : 40,
+        y: direction === 'next' ? -40 : 40,
+        onComplete: () => {
+          TweenMax.to(this.DOM.deco, 0.6, {
+            //ease: Elastic.easeOut.config(1, 0.65),
+            ease: 'Power2.easeOut',
+            x: 0,
+            y: 0
           });
-      }
+        }
+      });
+    }
       // Navigate the slideshow.
-      navigate(direction) {
-          // If animating return.
-          if ( this.isAnimating ) return;
-          this.isAnimating = true;
-          allowTilt = false;
+    navigate(direction) {
+      // If animating return.
+      if ( this.isAnimating ) return;
+      this.isAnimating = true;
+      allowTilt = false;
 
-          const upcomingPos = direction === 'next' ? 
-                  this.currentStep < this.slidesTotal-2 ? this.currentStep+2 : Math.abs(this.slidesTotal-2-this.currentStep):
-                  this.currentStep >= 2 ? this.currentStep-2 : Math.abs(this.slidesTotal-2+this.currentStep);
-          
-          this.upcomingSlide = this.slides[upcomingPos];
+      const upcomingPos = direction === 'next' ? 
+              this.currentStep < this.slidesTotal-2 ? this.currentStep+2 : Math.abs(this.slidesTotal-2-this.currentStep):
+              this.currentStep >= 2 ? this.currentStep-2 : Math.abs(this.slidesTotal-2+this.currentStep);
+      
+      this.upcomingSlide = this.slides[upcomingPos];
 
-          // Update current.
-          this.currentStep = direction === 'next' ? 
-                  this.currentStep < this.slidesTotal-1 ? this.currentStep+1 : 0 :
-                  this.currentStep > 0 ? this.currentStep-1 : this.slidesTotal-1;
-          
-          // Move slides (the previous, current, next and upcoming slide).
-          this.prevSlide.moveToPosition({position: direction === 'next' ? -2 : 0, delay: direction === 'next' ? 0 : 0.14}).then(() => {
-              if ( direction === 'next' ) {
-                  this.prevSlide.hide();
-              }
-          });
-          this.currentSlide.moveToPosition({position: direction === 'next' ? -1 : 1, delay: 0.07 });
-          this.currentSlide.hideTexts();
-          
-          this.bounceDeco(direction, 0.07);
-          
-          this.nextSlide.moveToPosition({position: direction === 'next' ? 0 : 2, delay: direction === 'next' ? 0.14 : 0 }).then(() => {
-              if ( direction === 'prev' ) {
-                  this.nextSlide.hide();
-              }
-          });
-
+      // Update current.
+      this.currentStep = direction === 'next' ? 
+              this.currentStep < this.slidesTotal-1 ? this.currentStep+1 : 0 :
+              this.currentStep > 0 ? this.currentStep-1 : this.slidesTotal-1;
+      
+      // Move slides (the previous, current, next and upcoming slide).
+      this.prevSlide.moveToPosition({position: direction === 'next' ? -2 : 0, delay: direction === 'next' ? 0 : 0.14}).then(() => {
           if ( direction === 'next' ) {
-              this.nextSlide.showTexts();
+              this.prevSlide.hide();
           }
-          else {
-              this.prevSlide.showTexts();
+      });
+      this.currentSlide.moveToPosition({position: direction === 'next' ? -1 : 1, delay: 0.07 });
+      this.currentSlide.hideTexts();
+      
+      this.bounceDeco(direction, 0.07);
+      
+      this.nextSlide.moveToPosition({position: direction === 'next' ? 0 : 2, delay: direction === 'next' ? 0.14 : 0 }).then(() => {
+          if ( direction === 'prev' ) {
+              this.nextSlide.hide();
           }
-          
-          this.upcomingSlide.moveToPosition({position: direction === 'next' ? 1 : -1, from: direction === 'next' ? 2 : -2, delay: 0.21 }).then(() => {
-              // Reset classes.
-              [this.nextSlide,this.currentSlide,this.prevSlide].forEach(slide => slide.reset());
-              this.render();
-              allowTilt = true;
-              this.isAnimating = false;
-          });
+      });
+
+      if ( direction === 'next' ) {
+          this.nextSlide.showTexts();
       }
+      else {
+          this.prevSlide.showTexts();
+      }
+      
+      this.upcomingSlide.moveToPosition({position: direction === 'next' ? 1 : -1, from: direction === 'next' ? 2 : -2, delay: 0.21 }).then(() => {
+          // Reset classes.
+          [this.nextSlide,this.currentSlide,this.prevSlide].forEach(slide => slide.reset());
+          this.render();
+          allowTilt = true;
+          this.isAnimating = false;
+      });
+    }
   }
 
   // Window sizes.
@@ -534,7 +532,7 @@ const Projects = () => {
   const slideshow = new Slideshow(slideshowItem);
 
   return (
-    <main>
+    <>
 			<div className="slideshow" ref={slideshowItem}>
 				<div className="slideshow__deco"></div>
 				<div className="slide">
@@ -604,11 +602,13 @@ const Projects = () => {
 					</div>
 				</div>
 				<button className="nav nav--prev">
-					<svg className="icon icon--navarrow-prev">
+					<svg className="icon icon--navarrow-prev" viewBox="0 0 408 408">
+            <polygon fill="#fff" fill-rule="nonzero" points="204 0 168.3 35.7 311.1 178.5 0 178.5 0 229.5 311.1 229.5 168.3 372.3 204 408 408 204"></polygon>
 					</svg>
 				</button>
 				<button className="nav nav--next">
-					<svg className="icon icon--navarrow-next">
+					<svg className="icon icon--navarrow-next" viewBox="0 0 408 408">
+				    <polygon fill="#fff" fill-rule="nonzero" points="204 0 168.3 35.7 311.1 178.5 0 178.5 0 229.5 311.1 229.5 168.3 372.3 204 408 408 204"></polygon>
 					</svg>
 				</button>
 			</div>
@@ -650,11 +650,12 @@ const Projects = () => {
 					<div className="content__text">But we're not there yet, so we don't need to worry about it. Now let's put some happy little clouds in here. What the devil. A thin paint will stick to a thick paint. I'm going to mix up a little color. We’ll use Van Dyke Brown, Permanent Red, and a little bit of Prussian Blue. Let's go up in here, and start having some fun The least little bit can do so much. Work on one thing at a time. Don't get carried away - we have plenty of time. Put your feelings into it, your heart, it's your world. These trees are so much fun. I get started on them and I have a hard time stopping.</div>
 				</div>
 				<button className="content__close">
-					<svg className="icon icon--longarrow">
+					<svg className="icon icon--longarrow" viewBox="0 0 54 24">
+            <path d="M.42 11.158L12.38.256c.333-.27.696-.322 1.09-.155.395.166.593.467.593.903v6.977h38.87c.29 0 .53.093.716.28.187.187.28.426.28.716v5.98c0 .29-.093.53-.28.716a.971.971 0 0 1-.716.28h-38.87v6.977c0 .416-.199.717-.592.903-.395.167-.759.104-1.09-.186L.42 12.62a1.018 1.018 0 0 1 0-1.462z"></path>
 					</svg>
 				</button>
 			</div>
-		</main>
+		</>
   )
 }
 
