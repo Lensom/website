@@ -7,57 +7,9 @@ body {
 	--color-side: #353535;
 	color: #57585c;
 	color: var(--color-text);
-	background-color: var(--color-bg);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	padding-top: 10rem;
-}
-
-/* Page Loader */
-.js .loading::before {
-	content: '';
-	position: fixed;
-	z-index: 100000;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: var(--color-bg);
-}
-
-.js .loading::after {
-	content: '';
-	position: fixed;
-	z-index: 100000;
-	top: 50%;
-	left: 50%;
-	width: 60px;
-	height: 60px;
-	margin: -30px 0 0 -30px;
-	pointer-events: none;
-	border-radius: 50%;
-	opacity: 0.4;
-	background: var(--color-link);
-	animation: loaderAnim 0.7s linear infinite alternate forwards;
-}
-
-@keyframes loaderAnim {
-	to {
-		opacity: 1;
-		transform: scale3d(0.5,0.5,1);
-	}
-}
-
-a {
-	text-decoration: none;
-	color: var(--color-link);
-	outline: none;
-}
-
-a:hover,
-a:focus {
-	color: var(--color-link-hover);
-	outline: none;
 }
 
 .hidden {
@@ -86,23 +38,6 @@ a:focus {
 	margin: 0 auto;
 	fill: currentColor;
 }
-
-.frame {
-	position: fixed;
-	z-index: 10000;
-	top: 5rem;
-	left: 0;
-	width: 100%;
-	max-width: none;
-	min-height: 0;
-	height: 100vh;
-	padding: 1rem;
-	pointer-events: none;
-}
-
-.frame a {
-	pointer-events: auto;
-}	
 
 /* Header */
 .codrops-header {
@@ -184,7 +119,6 @@ a:focus {
 
 .slideshow__deco {
 	grid-area: slide;
-	background: var(--color-deco);
 	width: 100%;
 	height: 80%;
 	align-self: center;
@@ -250,14 +184,14 @@ a:focus {
 	transform: scale3d(1.01,1.01,1);
 }
 
-.js .slide__img-wrap, 
-.js .slide__title-wrap,
-.js .slide__side {
+.slide__img-wrap, 
+.slide__title-wrap,
+.slide__side {
 	opacity: 0;
 	pointer-events: none;
 }
 
-.js .slide--current .slide__img-wrap {
+.slide--current .slide__img-wrap {
 	opacity: 1;
 	pointer-events: auto;
 }
@@ -360,11 +294,11 @@ a:focus {
 	font-size: 0.85rem;
 }
 
-.js .content__title,
-.js .content__subtitle,
-.js .content__number,
-.js .content__text,
-.js .content__close {
+ .content__title,
+ .content__subtitle,
+ .content__number,
+ .content__text,
+ .content__close {
 	opacity: 0;
 }
 
