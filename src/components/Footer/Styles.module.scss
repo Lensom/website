@@ -11,9 +11,18 @@
   }
 }
 
-.game {
-  color: $black2;
-  cursor: pointer;
+.theme {
+  background: $black2;
+  padding: 10px;
+  border-radius: 50%;
+  transition: all .3s ease;
+  &:hover {
+    background: rgba(255, 255, 255, .8);
+  }
+  img {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @media screen and (max-width: 768px) {
