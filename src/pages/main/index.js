@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './Styles.module.scss';
 import classNames from 'classnames';
+import ringImg from './images/ring.png';
 
 const Main = () => {
   return (
@@ -15,10 +16,10 @@ const Main = () => {
       </div>
       <div className="photo">
         <div className={classNames([classes.ring, classes.ringOne])}>
-          <img src="ring.png" alt="" />
+          <img src={ringImg} alt="" />
         </div>
         <div className={classNames([classes.ring, classes.ringTwo])}>
-          <img src="ring.png" alt="" />
+          <img src={ringImg} alt="" />
         </div>
       </div>
     </div>
