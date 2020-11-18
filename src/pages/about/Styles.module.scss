@@ -12,6 +12,7 @@
   justify-content: center;
   height: 100%;
   padding: 0 1em;
+  transform-style: preserve-3d;
 }
 
 .info {
@@ -22,12 +23,16 @@
   font-size: 22px;
   color: $gray;
   margin-bottom: 10px;
+  transform: translateZ(-50px);
+  opacity: 0;
 }
 
 .title {
   text-transform: uppercase;
   color: $gray;
   font-size: 34px;
+  transform: translateZ(-35px);
+  opacity: 0;
 }
 
 .link {
@@ -35,6 +40,8 @@
   position: relative;
   transition: .3s ease all;
   font-size: 22px;
+  transform: translateZ(-35px);
+  opacity: 0;
   &:after {
     transition: .3s ease all;
     content: '';
@@ -59,6 +66,8 @@
   margin: 20px;
   left: 100px;
   position: relative;
+  transform: translateZ(-70px);
+  opacity: 0;
 }
 
 
@@ -97,4 +106,15 @@
   .image {
     max-width: 360px;
   }
+}
+
+
+// Ledels for 3D
+
+#lvl1 {
+  transform: translateZ(-70px);
+}
+
+#lvl2 {
+  transform: translateZ(-35px);
 }
